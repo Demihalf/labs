@@ -1,0 +1,7 @@
+Hello, my little world!
+How are you? 
+   Are you alright?
+
+
+
+I love C++!
