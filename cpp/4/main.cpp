@@ -9,9 +9,7 @@ bool find(int elem, int *array, int count) {
     bool present = false;
 
     for (int i = 0; i < count && !present; i++) {
-        if (array[i] == elem) {
-            present = true;
-        }
+        present = array[i] == elem;
     }
 
     return present;
