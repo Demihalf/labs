@@ -37,7 +37,7 @@ int countDigits(int n) {
 
 int main() {
     const int N = 8;
-    int matrix[N][N] = {{0}};
+    double matrix[N][N] = {{0}};
 
     cout << "Enter " << N << " numbers: ";
     
@@ -51,12 +51,12 @@ int main() {
         }
     }
 
-    int maxDigits = countDigits(findLargest(&matrix[0][0], N, N));
-    int width = maxDigits + 2;
+//     int maxDigits = countDigits(findLargest(&matrix[0][0], N, N));
+//     int width = maxDigits + 2;
 
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            cout << setw(width) << matrix[i][j];
+            cout << setw(10) << matrix[i][j];
         }
 
         cout << endl;
