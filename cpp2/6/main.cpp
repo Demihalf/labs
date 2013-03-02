@@ -33,9 +33,6 @@
 #include <cstdlib>
 using namespace std;
 
-const char OPS[] = {'+', '-', '*', '/'};
-const char LETTERS[] = "abcdefghijklmnopqrstuvwxyz";
-
 struct Tree
 {
     Tree *left;
@@ -129,6 +126,29 @@ pair<Tree *, int> tree_gen(const string& rpn, int offset = 0)
     return res;
 }
 
+void print_tree(Tree * t, int offset);
+
+void print_branch(Tree * t, int offset)
+{
+    if (!t) {
+        return;
+    }
+
+    for (int i = 0; i < offset + 1; i++) {
+        cout << "| ";
+    }
+
+    cout << endl;
+
+    for (int i = 0; i < offset; i++) {
+        cout << "| ";
+    }
+
+    cout << "+-";
+
+    print_tree(t, offset + 1);
+}
+
 void print_tree(Tree * t, int offset = 0)
 {
     if (!t) {
@@ -137,37 +157,8 @@ void print_tree(Tree * t, int offset = 0)
 
     cout << t->val << endl;
 
-    if (t->left) {
-        for (int i = 0; i < offset + 1; i++) {
-            cout << "| ";
-        }
-
-        cout << endl;
-
-        for (int i = 0; i < offset; i++) {
-            cout << "| ";
-        }
-
-        cout << "+-";
-
-        print_tree(t->left, offset + 1);
-    }
-
-    if (t->right) {
-        for (int i = 0; i < offset + 1; i++) {
-            cout << "| ";
-        }
-
-        cout << endl;
-
-        for (int i = 0; i < offset; i++) {
-            cout << "| ";
-        }
-
-        cout << "+-";
-
-        print_tree(t->right, offset + 1);
-    }
+    print_branch(t->left, offset);
+    print_branch(t->right, offset);
 }
 
 void delete_tree(Tree * t) {
@@ -205,34 +196,22 @@ Tree * derivative(Tree * expr, char var)
         return new_tree(left, right, expr->val);
     }
 
+    Tree * left_derivative = derivative(expr->left, var);
+    Tree * right_derivative = derivative(expr->right, var);
+    Tree * left = duplicate_tree(expr->left);
+    Tree * right = duplicate_tree(expr->right);
+
+    Tree * first = new_tree(left_derivative, right, '*');
+    Tree * second = new_tree(left, right_derivative, '*');
+
     if (expr->val == '*') {
-        Tree * left_derivative = derivative(expr->left, var);
-        Tree * right_derivative = derivative(expr->right, var);
-        Tree * left = duplicate_tree(expr->left);
-        Tree * right = duplicate_tree(expr->right);
-
-        Tree * first = new_tree(left_derivative, right, '*');
-        Tree * second = new_tree(left, right_derivative, '*');
-
         return new_tree(first, second, '+');
-    }
-
-    if (expr->val == '/') {
-        Tree * left_derivative = derivative(expr->left, var);
-        Tree * right_derivative = derivative(expr->right, var);
-        Tree * left = duplicate_tree(expr->left);
-        Tree * right = duplicate_tree(expr->right);
-
-        Tree * first = new_tree(left_derivative, right, '*');
-        Tree * second = new_tree(left, right_derivative, '*');
-
+    } else {
         Tree * numerator = new_tree(first, second, '-');
         Tree * denominator = new_tree(duplicate_tree(right), duplicate_tree(right), '*');
 
         return new_tree(numerator, denominator, '/');
     }
-
-    return NULL;
 }
 
 int main() 
