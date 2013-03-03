@@ -159,28 +159,20 @@ Tree * Expression::simplifyTree(Tree * expr) const
     if (isterminal(expr->val)) 
         return new_tree(NULL, NULL, expr->val);
 
-    if (expr->val == '+') {
-        if (expr->left->val == '0')
-            return simplifyTree(expr->right);
-        
-        if (expr->right->val == '0')
-            return simplifyTree(expr->left);
-    } 
-
-    if (expr->val == '-') {
-        if (expr->right->val == '0')
-            return simplifyTree(expr->left);
+    if ((expr->val == '+' && expr->left->val == '0') ||
+        (expr->val == '*' && expr->left->val == '1'))
+    {
+        return simplifyTree(expr->right);
     }
 
-    if (expr->val == '*') {
-        if (expr->left->val == '1')
-            return simplifyTree(expr->right);
-        
-        if (expr->right->val == '1')
-            return simplifyTree(expr->left);
+    if (((expr->val == '+' || expr->val == '-') && expr->right->val == '0') ||
+        (expr->val == '*' && expr->right->val == '1'))
+    {
+        return simplifyTree(expr->left);
+    }
 
-        if (expr->left->val == '0' || expr->right->val == '0')
-            return new_tree(NULL, NULL, '0');
+    if (expr->val == '*' && (expr->left->val == '0' || expr->right->val == '0')) {
+        return new_tree(NULL, NULL, '0');
     }
 
     Tree * new_left = simplifyTree(expr->left);
