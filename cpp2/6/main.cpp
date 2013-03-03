@@ -26,12 +26,7 @@
 // =====================================================================================
 
 #include <iostream>
-#include <stack>
 #include <string>
-#include <algorithm>
-#include <utility>
-#include <cstdlib>
-#include <sstream>
 
 #include "tree.h"
 #include "expression.h"
