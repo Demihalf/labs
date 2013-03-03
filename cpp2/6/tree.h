@@ -18,33 +18,37 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-//       Filename:  main.cpp
-//    Description:  Uskova, p. 164, ex. 11g. Binary trees.
-//        Created:  02.03.2013 21:04:51
+//       Filename:  expression.cpp
+//    Description:  Binary tree structure declaration
+//        Created:  03.03.2013 10:18:07
 //         Author:  Valery Kharitonov, kharvd (at) gmail.com
 //
 // =====================================================================================
 
-#include <iostream>
-#include <stack>
-#include <string>
-#include <algorithm>
-#include <utility>
+#ifndef _TREE_H
+#define _TREE_H
+
 #include <cstdlib>
-#include <sstream>
 
-#include "tree.h"
-#include "expression.h"
-
-using namespace std;
-
-int main() 
+struct Tree
 {
-    string expr;
-    cin >> expr;
+    Tree *left;
+    Tree *right;
+    char val;  
+};
 
-    Expression ex(expr);
-    cout << ex.derive('x').simplify().getString() << endl;
-    
-    return 0;
-}
+
+// Allocates memory for a new tree element and sets references
+Tree * new_tree(Tree * left = NULL, 
+        Tree * right = NULL, char val = 0);
+
+// Deep copies the whole tree
+Tree * duplicate_tree(const Tree * src);
+
+// Prints the tree
+void print_tree(const Tree * t, int offset = 0);
+
+// Deletes tree and both its subtrees recursively
+void delete_tree(Tree * t);
+
+#endif

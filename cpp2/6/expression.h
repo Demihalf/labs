@@ -18,33 +18,48 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-//       Filename:  main.cpp
-//    Description:  Uskova, p. 164, ex. 11g. Binary trees.
-//        Created:  02.03.2013 21:04:51
+//       Filename:  expression.cpp
+//    Description:  Expression class for ex. 6
+//        Created:  03.03.2013 10:18:07
 //         Author:  Valery Kharitonov, kharvd (at) gmail.com
 //
 // =====================================================================================
 
-#include <iostream>
-#include <stack>
+#ifndef _EXPRESSION_H
+#define _EXPRESSION_N
+
 #include <string>
-#include <algorithm>
-#include <utility>
-#include <cstdlib>
 #include <sstream>
 
 #include "tree.h"
-#include "expression.h"
 
-using namespace std;
+using std::string;
 
-int main() 
+class Expression
 {
-    string expr;
-    cin >> expr;
+public:
+    Expression(); // Empty expression
+    Expression(const string& str); // Build expression from a string
+    ~Expression();
 
-    Expression ex(expr);
-    cout << ex.derive('x').simplify().getString() << endl;
+    string getString() const; // Get string representation of the expression
+
+    Expression simplify() const;
+    Expression derive(char var) const;
     
-    return 0;
-}
+private:
+    string toRPN(const string& expr) const;
+    bool isop(char c) const;
+    bool isterminal(char c) const;
+    Tree * treeFromRPN(const string& rpn);
+    Tree * derivative(const Tree * expr, char var) const;
+    Tree * simplifyTree(Tree * expr) const;
+    void buildFormula(std::ostringstream& str, const Tree * expr) const;
+
+private:
+    Tree * m_head;
+
+    int m_rpnOffset;
+};
+
+#endif

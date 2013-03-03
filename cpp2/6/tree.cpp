@@ -18,33 +18,70 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-//       Filename:  main.cpp
-//    Description:  Uskova, p. 164, ex. 11g. Binary trees.
-//        Created:  02.03.2013 21:04:51
+//       Filename:  tree.cpp
+//    Description:  Binary tree structure definition
+//        Created:  03.03.2013 10:26:55
 //         Author:  Valery Kharitonov, kharvd (at) gmail.com
 //
 // =====================================================================================
 
-#include <iostream>
-#include <stack>
-#include <string>
-#include <algorithm>
-#include <utility>
-#include <cstdlib>
-#include <sstream>
-
 #include "tree.h"
-#include "expression.h"
 
-using namespace std;
+#include <iostream>
 
-int main() 
+Tree * new_tree(Tree * left, Tree * right, char val)
 {
-    string expr;
-    cin >> expr;
+    Tree * t = new Tree;
+    t->left = left;
+    t->right = right;
+    t->val = val;
 
-    Expression ex(expr);
-    cout << ex.derive('x').simplify().getString() << endl;
-    
-    return 0;
+    return t;
+}
+
+Tree * duplicate_tree(const Tree * src)
+{
+    if (!src) return NULL;
+
+    return new_tree(duplicate_tree(src->left), 
+            duplicate_tree(src->right), src->val);
+}
+
+void print_branch(const Tree * t, int offset)
+{
+    if (!t) return;
+
+    for (int i = 0; i < offset + 1; i++) {
+        std::cout << "| ";
+    }
+
+    std::cout << std::endl;
+
+    for (int i = 0; i < offset; i++) {
+        std::cout << "| ";
+    }
+
+    std::cout << "+-";
+
+    print_tree(t, offset + 1);
+}
+
+void print_tree(const Tree * t, int offset)
+{
+    if (!t) return;
+
+    std::cout << t->val << std::endl;
+
+    print_branch(t->left, offset);
+    print_branch(t->right, offset);
+}
+
+void delete_tree(Tree * t) 
+{
+    if (!t) return;
+
+    if (t->left) delete_tree(t->left);
+    if (t->right) delete_tree(t->right);
+
+    delete t;
 }
