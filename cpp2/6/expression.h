@@ -46,6 +46,9 @@ public:
 
     Expression simplify() const;
     Expression derive(char var) const;
+    void printTree() const {
+        print_tree(m_head);
+    }
     
 private:
     string toRPN(const string& expr) const;

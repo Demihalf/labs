@@ -39,6 +39,8 @@ int main()
     cin >> expr;
 
     Expression ex(expr);
+
+    ex.printTree();
     cout << ex.derive('x').simplify().getString() << endl;
     
     return 0;
